@@ -6,7 +6,7 @@ const WebSocketServer = require('ws');  //  npm 中的模块（webSocket）
 const MsgHandle = require('../MsgHandler/MsgHandler.js');
 const basePb = require('../proto/base_pb.js');
 const wsServer = new WebSocketServer.Server({   //  设置ip 和 port
-    host: "127.0.0.2",
+    host: "127.0.0.1",
     port: 3010
 });
 this.UserList = [];  //  用户列表
