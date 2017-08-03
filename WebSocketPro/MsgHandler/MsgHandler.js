@@ -21,6 +21,7 @@ MsgHandler.prototype.handle = function (ws, data) {
             break;
         }
         case MsgId.MSGID.EVENT_LEAVE_ROOM_REQ: {  //  离开房间
+            this.leaveRoom(ws, msgData);
             break;
         }
         case MsgId.MSGID.EVENT_SEND_MEG_REQ: {  //  发送消息
@@ -172,6 +173,44 @@ MsgHandler.prototype.enterRoom = function (ws, roomid) {
         };
         sendMsg(ws, body);
     }
+};
+MsgHandler.prototype.leaveRoom = function (ws, data) {
+    let hasSuc = false;
+    this.target.roomList.forEach((item, roomindex) => {
+        if (data.roomId === item.roomId) {
+            item.users.forEach((user, index) => {
+                if (user.ws === ws) {
+                    console.log(`将房间${data.roomId}里${user.nickName}移除`);
+                    hasSuc = true;
+                    item.users.splice(index, 1);
+                    const body = {
+                        msgId: MsgId.MSGID.USER_LEAVE_ROOM_PUSH,
+                        msgData: {
+                            nickName: user.nickName,
+                        }
+                    };
+                    if (item.users.length === 0) {
+                        console.log(`房间${item.roomId}已无人，此房间自动解散`);
+                        this.target.roomList.splice(roomindex, 1);
+                    }
+                    this.sendRoomAllUser(item.roomId, body, ws);
+                }
+            });
+        }
+    });
+    let code;
+    if (hasSuc) {
+        code = MsgId.CODEID.RIGHT_CODE;
+    } else {
+        code = MsgId.CODEID.COMMONLY_ERROR_CODE;
+    }
+    const body = {
+        msgId: MsgId.MSGID.EVENT_LEAVE_ROOM_REP,
+        msgData: {
+            code: code
+        }
+    }
+    sendMsg(ws, body);
 };
 /**
  *  发送信息

@@ -12,7 +12,8 @@ module.exports = {
         EVENT_MESSAGE_PUSH: 9,  //  大厅服务器推送的消息
         EVENT_CREATE_ROOM_REQ: 10, //  创建房间
         EVENT_CREATE_ROOM_REP: 11, //  创建房间回复
-        USER_ENTER_ROOM_PUSH: 12  //  有玩家加入的推送
+        USER_ENTER_ROOM_PUSH: 12,  //  有玩家加入的推送
+        USER_LEAVE_ROOM_PUSH: 13,  //  有玩家离开房间的推送
     },
     CODEID: {
         COMMONLY_ERROR_CODE: -1,  //  一般的错误code值
